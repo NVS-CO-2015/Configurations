@@ -34,25 +34,8 @@ ip dhcp pool Router_A
 !
 !
 !
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 interface FastEthernet0/0
- no ip address
- shutdown
+ ip address 10.1.0.1 255.255.255.0
  speed auto
 !
 interface Serial0/0
@@ -65,7 +48,8 @@ interface Serial0/1
  shutdown
 !
 interface Ethernet1/0
- ip address 10.1.0.1 255.255.255.0
+ no ip address
+ shutdown
  half-duplex
 !
 router ospf 1
