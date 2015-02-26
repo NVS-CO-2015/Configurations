@@ -1,0 +1,104 @@
+Router_A#sh running-config
+Building configuration...
+
+Current configuration : 1028 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router_A
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+voice-card 2
+!
+voice-card 3
+!
+ip cef
+!
+!
+no ip dhcp use vrf connected
+!
+ip dhcp pool Router_A
+   network 10.1.0.0 255.255.255.0
+   default-router 10.1.0.1
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ speed auto
+!
+interface Serial0/0
+ ip address 10.5.0.1 255.255.255.0
+ no fair-queue
+ clock rate 128000
+!
+interface Serial0/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ ip address 10.1.0.1 255.255.255.0
+ half-duplex
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.1.0.0 0.0.0.255 area 0
+ network 10.5.0.0 0.0.0.255 area 0
+ default-information originate always
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+control-plane
+!
+!
+!
+voice-port 2/0
+!
+voice-port 2/1
+!
+voice-port 3/0
+!
+voice-port 3/1
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+!
+end
