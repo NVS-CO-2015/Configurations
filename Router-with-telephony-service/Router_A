@@ -1,8 +1,5 @@
-Current configuration : 1427 bytes
-!
-! Last configuration change at 18:41:48 UTC Thu Feb 26 2015
-!
 version 12.4
+service config
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
@@ -12,6 +9,8 @@ hostname Router_A
 boot-start-marker
 boot-end-marker
 !
+enable secret 5 $1$jzej$0lDCJcgEe.dT1gk1emEbR.
+enable password cisco
 !
 no aaa new-model
 !
@@ -53,31 +52,33 @@ ip dhcp pool Router_A
 interface FastEthernet0/0
  ip address 10.1.0.1 255.255.255.0
  speed auto
+ no cdp enable
 !
 interface Serial0/0
  ip address 10.5.0.1 255.255.255.0
+ shutdown
  no fair-queue
  clock rate 128000
 !
 interface Serial0/1
  no ip address
  shutdown
+ no cdp enable
 !
 interface Ethernet1/0
  no ip address
  shutdown
  half-duplex
+ no cdp enable
 !
 router ospf 1
  log-adjacency-changes
- network 10.1.0.0 0.0.0.255 area 0
- network 10.5.0.0 0.0.0.255 area 0
- default-information originate always
 !
 !
 no ip http server
 no ip http secure-server
 !
+dialer-list 1 protocol ip permit
 !
 control-plane
 !
@@ -101,7 +102,7 @@ telephony-service
  max-ephones 10
  max-dn 10
  ip source-address 10.1.0.1 port 2000
- create cnf-files version-stamp 7960 Feb 26 2015 18:36:18
+ create cnf-files version-stamp 7960 Mar 26 2015 16:10:07
  max-conferences 4 gain -6
 !
 !
@@ -119,7 +120,12 @@ ephone  1
 !
 !
 line con 0
+ exec-timeout 0 0
 line aux 0
 line vty 0 4
+ password class
+ login
 !
+no process cpu extended
+no process cpu autoprofile hog
 end
