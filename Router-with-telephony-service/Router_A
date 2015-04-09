@@ -1,3 +1,5 @@
+Current configuration : 1795 bytes
+!
 version 12.4
 service config
 service timestamps debug datetime msec
@@ -49,6 +51,9 @@ ip dhcp pool Router_A
 !
 !
 !
+interface Loopback0
+ ip address 10.0.0.2 255.255.255.255
+!
 interface FastEthernet0/0
  ip address 10.1.0.1 255.255.255.0
  speed auto
@@ -56,7 +61,6 @@ interface FastEthernet0/0
 !
 interface Serial0/0
  ip address 10.5.0.1 255.255.255.0
- shutdown
  no fair-queue
  clock rate 128000
 !
@@ -73,6 +77,10 @@ interface Ethernet1/0
 !
 router ospf 1
  log-adjacency-changes
+ network 10.0.0.1 0.0.0.0 area 0
+ network 10.1.0.0 0.0.0.255 area 0
+ network 10.5.0.0 0.0.0.255 area 0
+ default-information originate always
 !
 !
 no ip http server
@@ -96,6 +104,10 @@ voice-port 3/1
 !
 !
 !
+!
+dial-peer voice 1 voip
+ destination-pattern 12.
+ session target ipv4:10.2.0.1
 !
 !
 telephony-service

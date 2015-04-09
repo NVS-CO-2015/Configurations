@@ -1,6 +1,6 @@
-Building configuration...
-
-Current configuration : 1308 bytes
+Current configuration : 2045 bytes
+!
+! Last configuration change at 17:36:39 UTC Thu Apr 9 2015
 !
 version 12.4
 service timestamps debug datetime msec
@@ -20,21 +20,26 @@ resource policy
 tdm clock bri-auto
 voice-card 2
 !
-voice-card 3
+ --More--
+Apr  9 17:43:09.998: %PQUICC_ETHER-1-LOSTCARR: Unit 0, lost carrier. Transceivevoice-card 3
 !
 ip cef
 !
 !
 no ip dhcp use vrf connected
 !
+ip dhcp pool VOICE
+   network 10.0.2.0 255.255.255.0
+   default-router 10.0.2.1
+   option 150 ip 10.0.2.1
+!
 ip dhcp pool Router_B
    network 10.2.0.0 255.255.255.0
    default-router 10.2.0.1
-!
-ip dhcp pool Router_b
    option 150 ip 10.2.0.1
 !
 !
+no ip domain lookup
 !
 !
 !
@@ -52,10 +57,12 @@ ip dhcp pool Router_b
 !
 !
 !
+!
+interface Loopback0
+ ip address 10.0.0.1 255.255.255.255
 !
 interface FastEthernet0/0
  ip address 10.2.0.1 255.255.255.0
- shutdown
  speed auto
 !
 interface Serial0/0
@@ -65,11 +72,9 @@ interface Serial0/0
 !
 interface Serial0/1
  ip address 10.5.0.2 255.255.255.0
- shutdown
 !
 interface Ethernet1/0
- no ip address
- shutdown
+ ip address 10.2.2.1 255.255.255.252
  half-duplex
 !
 interface BRI3/0
@@ -82,215 +87,20 @@ interface BRI3/1
 !
 router ospf 1
  log-adjacency-changes
+ network 10.0.0.1 0.0.0.0 area 0
  network 10.2.0.0 0.0.0.255 area 0
  network 10.5.0.0 0.0.0.255 area 0
  default-information originate always
 !
+ip route 0.0.0.0 0.0.0.0 Ethernet1/0
 !
 no ip http server
 no ip http secure-server
 !
-!
-control-plane
-!
-
-Router_B(config-telephony)#
-Router_B(config-telephony)#
-Router_B(config-telephony)#exit
-Router_B(config)#no ip dhcp pool Router_b
-Router_B(config)#do show run
-Building configuration...
-
-Current configuration : 1257 bytes
-!
-version 12.4
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-!
-hostname Router_B
-!
-boot-start-marker
-boot-end-marker
-!
-!
-no aaa new-model
-!
-resource policy
-!
-tdm clock bri-auto
-voice-card 2
-!
-voice-card 3
-!
-ip cef
-!
-!
-no ip dhcp use vrf connected
-!
-ip dhcp pool Router_B
-   network 10.2.0.0 255.255.255.0
-   default-router 10.2.0.1
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-
-Router_B(config)#ip dhcp pool Router_B
-Router_B(dhcp-config)#option 150 ip 10.2.0.1
-Router_B(dhcp-config)#do show run
-% Ambiguous command:  "do show run"
-Router_B(config)#do show run
-Building configuration...
-
-Current configuration : 1284 bytes
-!
-version 12.4
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-!
-hostname Router_B
-!
-boot-start-marker
-boot-end-marker
-!
-!
-no aaa new-model
-!
-resource policy
-!
-tdm clock bri-auto
-voice-card 2
-!
-voice-card 3
-!
-ip cef
-!
-!
-no ip dhcp use vrf connected
-!
-ip dhcp pool Router_B
-   network 10.2.0.0 255.255.255.0
-   default-router 10.2.0.1
-   option 150 ip 10.2.0.1
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-
-Router_B(config)#do show run
-Building configuration...
-
-Current configuration : 1284 bytes
-!
-version 12.4
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-!
-hostname Router_B
-!
-boot-start-marker
-boot-end-marker
-!
-!
-no aaa new-model
-!
-resource policy
-!
-tdm clock bri-auto
-voice-card 2
-!
-voice-card 3
-!
-ip cef
-!
-!
-no ip dhcp use vrf connected
-!
-ip dhcp pool Router_B
-   network 10.2.0.0 255.255.255.0
-   default-router 10.2.0.1
-   option 150 ip 10.2.0.1
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-interface FastEthernet0/0
- ip address 10.2.0.1 255.255.255.0
- shutdown
- speed auto
-!
-interface Serial0/0
- no ip address
- shutdown
- no fair-queue
-!
-interface Serial0/1
- ip address 10.5.0.2 255.255.255.0
- shutdown
-!
-interface Ethernet1/0
- no ip address
- shutdown
- half-duplex
-!
-interface BRI3/0
- no ip address
- shutdown
-!
-interface BRI3/1
- no ip address
- shutdown
-!
-router ospf 1
- log-adjacency-changes
- network 10.2.0.0 0.0.0.255 area 0
- network 10.5.0.0 0.0.0.255 area 0
- default-information originate always
-!
-!
-no ip http server
-no ip http secure-server
-!
+tftp-server flash:P00307020400.bin
+tftp-server flash:P00307020400.loads
+tftp-server flash:P00307020400.sb2
+tftp-server flash:P00307020400.sbn
 !
 control-plane
 !
@@ -309,12 +119,31 @@ voice-port 3/1
 !
 !
 !
+dial-peer voice 1 voip
+ destination-pattern 11.
+ session target ipv4:10.1.0.1
+!
 !
 telephony-service
+ load 7960-7940 P00307020400
  max-ephones 10
  max-dn 10
  ip source-address 10.2.0.1 port 2000
+ create cnf-files version-stamp 7960 Apr 09 2015 16:03:55
  max-conferences 4 gain -6
+!
+!
+ephone-dn  1
+ number 121
+ name billa_wien
+!
+!
+ephone  1
+ description "Billa Wien"
+ mac-address 0009.E8B4.B08F
+ type 7960
+ button  1:1
+!
 !
 !
 line con 0
@@ -324,35 +153,13 @@ line vty 0 4
 !
 end
 
-Router_B(config)#
-Router_B(config)#
-Router_B(config)#tel
-Router_B(config)#telephony-service
-Router_B(config-telephony)#create cn
-Router_B(config-telephony)#create cnf-files
-Creating CNF files
-CNF-FILES: Clock is not set or synchronized,
-                retaining old versionStamps
-
-Router_B(config-telephony)#ephone-dn 1
-Router_B(config-ephone-dn)#numnber
-*Mar 26 17:41:09.271: %LINK-3-UPDOWN: Interface ephone_dsp DN 1.1, changed state number 121
-                             ^
-% Invalid input detected at '^' marker.
-
-Router_B(config-ephone-dn)#number 121
-Router_B(config-ephone-dn)#name billa_wien
-Router_B(config-ephone-dn)#ephone 1
-Router_B(config-ephone)#des
-Router_B(config-ephone)#description "Billa Wien"
-Router_B(config-ephone)#mac
-Router_B(config-ephone)#mac-address 0009.E8B4.B08F
-Router_B(config-ephone)#type 7960
-Router_B(config-ephone)#button 1:1
-Router_B(config-ephone)#do show run
+Router_B#
+Router_B#show run
 Building configuration...
 
-Current configuration : 1477 bytes
+Current configuration : 2045 bytes
+!
+! Last configuration change at 17:36:39 UTC Thu Apr 9 2015
 !
 version 12.4
 service timestamps debug datetime msec
@@ -379,12 +186,18 @@ ip cef
 !
 no ip dhcp use vrf connected
 !
+ip dhcp pool VOICE
+   network 10.0.2.0 255.255.255.0
+   default-router 10.0.2.1
+   option 150 ip 10.0.2.1
+!
 ip dhcp pool Router_B
    network 10.2.0.0 255.255.255.0
    default-router 10.2.0.1
    option 150 ip 10.2.0.1
 !
 !
+no ip domain lookup
 !
 !
 !
@@ -402,10 +215,12 @@ ip dhcp pool Router_B
 !
 !
 !
+!
+interface Loopback0
+ ip address 10.0.0.1 255.255.255.255
 !
 interface FastEthernet0/0
  ip address 10.2.0.1 255.255.255.0
- shutdown
  speed auto
 !
 interface Serial0/0
@@ -415,11 +230,9 @@ interface Serial0/0
 !
 interface Serial0/1
  ip address 10.5.0.2 255.255.255.0
- shutdown
 !
 interface Ethernet1/0
- no ip address
- shutdown
+ ip address 10.2.2.1 255.255.255.252
  half-duplex
 !
 interface BRI3/0
@@ -432,14 +245,20 @@ interface BRI3/1
 !
 router ospf 1
  log-adjacency-changes
+ network 10.0.0.1 0.0.0.0 area 0
  network 10.2.0.0 0.0.0.255 area 0
  network 10.5.0.0 0.0.0.255 area 0
  default-information originate always
 !
+ip route 0.0.0.0 0.0.0.0 Ethernet1/0
 !
 no ip http server
 no ip http secure-server
 !
+tftp-server flash:P00307020400.bin
+tftp-server flash:P00307020400.loads
+tftp-server flash:P00307020400.sb2
+tftp-server flash:P00307020400.sbn
 !
 control-plane
 !
@@ -458,12 +277,17 @@ voice-port 3/1
 !
 !
 !
+dial-peer voice 1 voip
+ destination-pattern 11.
+ session target ipv4:10.1.0.1
+!
 !
 telephony-service
+ load 7960-7940 P00307020400
  max-ephones 10
  max-dn 10
  ip source-address 10.2.0.1 port 2000
- create cnf-files version-stamp Jan 01 2002 00:00:00
+ create cnf-files version-stamp 7960 Apr 09 2015 16:03:55
  max-conferences 4 gain -6
 !
 !
