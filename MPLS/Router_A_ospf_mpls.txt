@@ -1,0 +1,179 @@
+Building configuration...
+
+
+Current configuration : 1825 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router_A
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+!
+no aaa new-model
+memory-size iomem 25
+network-clock-participate wic 0
+!
+dot11 syslog
+ip source-route
+!
+!
+ip cef
+!
+!
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+mpls label protocol ldp
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.0.1.254 255.255.255.255
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface BRI0/0/0
+ no ip address
+!
+interface BRI0/0/1
+ no ip address
+!
+interface Serial0/1/0
+ ip address 10.0.0.1 255.255.255.0
+ mpls label protocol ldp
+ mpls ip
+ clock rate 2000000
+!
+interface Serial0/1/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface FastEthernet1/0
+!
+interface FastEthernet1/1
+!
+interface FastEthernet1/2
+!
+interface FastEthernet1/3
+!
+interface FastEthernet1/4
+!
+interface FastEthernet1/5
+!
+interface FastEthernet1/6
+!
+interface FastEthernet1/7
+!
+interface FastEthernet1/8
+!
+interface FastEthernet1/9
+!
+interface FastEthernet1/10
+!
+interface FastEthernet1/11
+!
+interface FastEthernet1/12
+!
+interface FastEthernet1/13
+!
+interface FastEthernet1/14
+!
+interface FastEthernet1/15
+!
+interface Vlan1
+ no ip address
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.0.0.0 0.0.0.255 area 0
+ network 10.0.1.254 0.0.0.0 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+voice-port 0/0/0
+!
+voice-port 0/0/1
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+end
