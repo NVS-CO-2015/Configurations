@@ -1,0 +1,151 @@
+Current configuration : 2229 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Billa_Linz
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+tdm clock bri-auto
+voice-card 2
+!
+voice-card 3
+!
+ip cef
+!
+!
+no ip dhcp use vrf connected
+!
+!
+ip dhcp pool Billa_Linz
+   network 10.1.2.0 255.255.255.252
+   default-router 10.1.2.1
+   option 150 ip 10.1.2.1
+!
+!
+no ip domain lookup
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.10.10.2 255.255.255.255
+!
+interface FastEthernet0/0
+ ip address 10.1.2.1 255.255.255.252
+ speed auto
+!
+interface Serial0/0
+ ip address 10.0.0.5 255.255.255.252
+ no fair-queue
+ clock rate 128000
+!
+interface Serial0/1
+ ip address 10.0.0.2 255.255.255.252
+ no fair-queue
+!
+interface Ethernet1/0
+ ip address 10.2.2.1 255.255.255.252
+ shutdown
+ half-duplex
+!
+interface BRI3/0
+ no ip address
+ shutdown
+!
+interface BRI3/1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.0.0.0 0.0.0.3 area 0
+ network 10.0.0.4 0.0.0.3 area 0
+ network 10.1.2.0 0.0.0.3 area 0
+ network 10.2.2.0 0.0.0.3 area 0
+ network 10.10.10.2 0.0.0.0 area 0
+ default-information originate always
+!
+ip route 0.0.0.0 0.0.0.0 Ethernet1/0
+!
+no ip http server
+no ip http secure-server
+!
+tftp-server flash:P00307020400.bin
+tftp-server flash:P00307020400.loads
+tftp-server flash:P00307020400.sb2
+tftp-server flash:P00307020400.sbn
+!
+control-plane
+!
+!
+!
+voice-port 2/0
+!
+voice-port 2/1
+!
+voice-port 3/0
+!
+voice-port 3/1
+!
+!
+!
+!
+!
+!
+dial-peer voice 1 voip
+ destination-pattern 12.
+ session target ipv4:10.1.1.1
+!
+!
+telephony-service
+ load 7960-7940 P00307020400
+ max-ephones 10
+ max-dn 10
+ ip source-address 10.2.0.1 port 2000
+ create cnf-files version-stamp 7960 Apr 09 2015 16:03:55
+ max-conferences 4 gain -6
+!
+!
+ephone-dn  1
+ number 221
+ name billa_linz
+!
+!
+ephone  1
+ description "Billa Linz"
+ mac-address 0009.E8B4.B08F
+ type 7960
+ button  1:1
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+end
